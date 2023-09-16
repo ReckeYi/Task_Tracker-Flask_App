@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1 class="mb-3">Tasks for {{ user.username }} ({{ tasks.total }})</h1>
+    {% for task in tasks.items %}
+        <task class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('users.user_tasks', username=current_user.username) }}">
+                  {{ task.user.username }}
+              </a>
+              <small class="text-muted">{{ task.created_at.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h5><a class="article-title" href="{{ url_for('tasks.task', task_id=task.id) }}">{{ task.title }}</a></h5>
+            <p class="article-content">{{ task.description }}</p>
+            <div>
+                <p><small>Status: <mark>{{ task.status.status }}</mark> | Project:
+                    <mark> <a href="{{ url_for('projects.project', project_id=task.project.id) }}">
+                        {{ task.project.title }}</a></mark>
+                    | Start Date: <mark>{{ task.created_at.strftime('%Y-%m-%d') }}</mark>
+                    | Deadline: <mark>{{ task.deadline.strftime('%Y-%m-%d') }}</mark>
+                    | Assignee: <mark><a href="{{ url_for('users.account') }}">Me</a></mark>
+                </small></p>
+            </div>
+          </div>
+        </task>
+    {% endfor %}
+    {% for page_num in tasks.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if tasks.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('users.user_tasks', username=current_user.username, page=page_num) }}">
+              {{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('users.user_tasks', username=task.user.username, page=page_num) }}">
+              {{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+{% endblock content %}

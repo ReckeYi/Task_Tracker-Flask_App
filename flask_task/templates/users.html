@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>All Users</h1>
+    {% for user in users.items %}
+        <users class="media content-section">
+          <div class="media-body">
+            <a class="mr-2" href="{{ url_for('users.user_update', username=user.username) }}">{{ user.username }}</a>
+          </div>
+          <div>
+                <small class="text-muted">{{ user.roles.role }}</small>
+          </div>
+        </users>
+    {% endfor %}
+    {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if users.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}"> {{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}"> {{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
