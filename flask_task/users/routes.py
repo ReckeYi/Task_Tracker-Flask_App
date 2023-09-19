@@ -1,16 +1,19 @@
 from flask import Blueprint, redirect, url_for, flash, render_template, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug import Response
 
 from flask_task import bcrypt, db
 from flask_task.models import User, Role, Project, Task
 from flask_task.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdateUserForm, SelectRolesForm, \
-    RequestResetForm, ResetPasswordForm
+    RequestResetForm, ResetPasswordForm, AddUserForm
 from flask_task.users.utils import save_picture, send_reset_email
+
+from typing import Optional, Union
 
 users = Blueprint('users', __name__)
 
 @users.route('/register', methods=['GET', 'POST'])
-def register():
+def register() -> Union[Response, str]:
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegistrationForm()
@@ -48,10 +51,14 @@ def logout():
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    roles = Role.query.all()
-    roles_list = [(i.id, i.role) for i in roles]
-    form = UpdateAccountForm()
-    form.role_id.choices = roles_list
+    if current_user.role_id == 1:
+        roles = Role.query.all()
+        roles_list = [(i.id, i.role) for i in roles]
+        form = UpdateAccountForm()
+        form.role_id.choices = roles_list
+    else:
+        form = UpdateAccountForm()
+
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
@@ -60,6 +67,8 @@ def account():
         current_user.email = form.email.data
         if current_user.role_id == 1:
             current_user.role_id = form.role_id.data
+        else:
+            None
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
@@ -139,18 +148,18 @@ def user_tasks(username):
     return render_template('user_tasks.html', tasks=tasks, user=user)
 
 
-@users.route('/users', methods=['GET'])
-@login_required
-def users_list():
-    page = request.args.get('page', 1, type=int)
-    users = User.query.order_by(User.username).paginate(page=page, per_page=10)
-    roles = Role.query.all()
-    roles_list = [(i.id, i.role) for i in roles]
-    form = SelectRolesForm()
-    form.role_id.choices = roles_list
-    if current_user.role_id != 1:
-        abort(403)
-    return render_template('users.html', page=page, users=users, form=form)
+# @users.route('/users', methods=['GET'])
+# @login_required
+# def users_list():
+#     page = request.args.get('page', 1, type=int)
+#     users = User.query.order_by(User.username).paginate(page=page, per_page=10)
+#     roles = Role.query.all()
+#     roles_list = [(i.id, i.role) for i in roles]
+#     form = SelectRolesForm()
+#     form.role_id.choices = roles_list
+#     if current_user.role_id != 1:
+#         abort(403)
+#     return render_template('users.html', page=page, users=users, form=form)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
@@ -182,3 +191,39 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+
+# @users.route('/test')
+# def index():
+#     users = User.query
+#     for user in users:
+#         user = user
+#     return render_template('test.html', title='Bootstrap Table', users=users, user=user)
+
+@users.route('/users', methods=['GET'])
+@login_required
+def users_list():
+    users = User.query
+    if current_user.role_id != 1:
+        abort(403)
+    return render_template('users.html', title='All Users', users=users)
+
+@users.route('/add_user', methods=['GET', 'POST'])
+@login_required
+def add_user():
+    roles = Role.query.all()
+    roles_list = [(i.id, i.role) for i in roles]
+    if current_user.role_id != 1:
+        abort(403)
+    form = AddUserForm()
+    form.role_id.choices = roles_list
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password,
+                    role_id=form.role_id.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('User has been created! You are now able to log in', 'success')
+        return redirect(url_for('users.users_list'))
+    return render_template('add_user.html', title='Register', form=form)
+

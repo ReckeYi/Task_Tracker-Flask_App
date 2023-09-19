@@ -10,6 +10,8 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+
     {% if title %}
         <title>Flask Task - {{ title }}</title>
     {% else %}
@@ -26,7 +28,8 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('projects.project_list') }}">Projects</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
@@ -63,13 +66,17 @@
             <h3>Just a Sidebar</h3>
             <p class='text-muted'>Some additional links here
               {% if current_user.is_authenticated %}
-                  <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">
-                        <a href="{{ url_for('users.users_list') }}">All Users</a></li>
-                    <li class="list-group-item list-group-item-light">
-                        <a href="{{ url_for('users.user_tasks', username=current_user.username) }}">My Tasks</a></li>
-                    <li class="list-group-item list-group-item-light">etc</li>
-                  </ul>
+                {% if current_user.role_id == 1: %}
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('users.users_list') }}">All Users</a></li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('users.user_tasks', username=current_user.username) }}">My Tasks</a></li>
+                        <li class="list-group-item list-group-item-light">etc</li>
+                    </ul>
+                {% else %}
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">You need Administrator level access to access sidebar features.</li>
+                </ul>
+                {% endif %}
               {% else %}
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-light">Please <a href="{{ url_for('users.login') }}">login</a> to access</li>
@@ -87,5 +94,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

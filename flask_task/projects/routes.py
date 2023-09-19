@@ -8,6 +8,12 @@ from flask_task import db
 projects = Blueprint('projects', __name__)
 
 
+@projects.route('/project_list')
+def project_list():
+    page = request.args.get('page', 1, type=int)
+    projects = Project.query.order_by(Project.title).paginate(page=page, per_page=5)
+    return render_template('project_list.html', projects=projects)
+
 @projects.route("/project/new", methods=['GET', 'POST'])
 @login_required
 def new_project():

@@ -12,10 +12,17 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Account Info</legend>
+                {% if current_user.role_id == 1: %}
+                    <div class="form-group">
+                        {{ form.role_id.label(class="form-control-label") }}
+                        {{ form.role_id(class="form-control form-control-lg") }}
+                    </div>
+                {% else %}
                 <div class="form-group">
-                    {{ form.role_id.label(class="form-control-label") }}
-                    {{ form.role_id(class="form-control form-control-lg") }}
-                </div>
+                        {{ form.role_id.label(class="form-control-label") }}:
+                        {{ current_user.roles.role }}
+                    </div>
+                {% endif %}
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
 

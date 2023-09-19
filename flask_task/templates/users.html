@@ -1,25 +1,44 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>All Users</h1>
-    {% for user in users.items %}
-        <users class="media content-section">
-          <div class="media-body">
-            <a class="mr-2" href="{{ url_for('users.user_update', username=user.username) }}">{{ user.username }}</a>
-          </div>
-          <div>
-                <small class="text-muted">{{ user.roles.role }}</small>
-          </div>
-        </users>
-    {% endfor %}
-    {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-            {% if users.page == page_num %}
-                <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}"> {{ page_num }}</a>
-            {% else %}
-                <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}"> {{ page_num }}</a>
-            {% endif %}
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
+    <div>
+        <a class="mr-2" href="{{ url_for('users.add_user') }}">
+            <button type="button" class="btn btn-sm btn-primary mb-3">Add User</button>
+        </a>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td><a class="mr-2" href="{{ url_for('users.user_update', username=user.username) }}">{{ user.username }}</a></td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles.role }}</td>
+                <td><a href="{{ url_for('users.user_update', username=user.username) }}"><button type="button" class="btn btn-sm ">Update</button></a>
+                    <form style="display:inline" onclick="return confirm('Are you sure you want to delete this item?');" action="{{ url_for('users.delete_user', user_id=user.id) }}" method="POST">
+                        <input type=hidden value="{{ user.id }}"name=user_id>
+                        <input class="btn btn-danger btn-sm" type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
 {% endblock content %}
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}

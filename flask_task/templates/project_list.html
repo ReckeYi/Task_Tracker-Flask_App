@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for project in projects.items %}
+        <project class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('users.user_projects', username=project.user.username) }}">
+                    {{ project.user.username }}</a>
+                <small class="text-muted">{{ project.created.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h3><a class="article-title" href="{{ url_for('projects.project', project_id=project.id) }}">
+                {{ project.title }}</a>
+            </h3>
+            <p class="article-content">{{ project.description }}</p>
+          </div>
+        </project>
+    {% endfor %}
+    {% for page_num in projects.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if projects.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('projects.project_list', page=page_num) }}"> {{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('projects.project_list', page=page_num) }}"> {{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+{% endblock content %}

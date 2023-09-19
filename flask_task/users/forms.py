@@ -12,7 +12,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Sign Up')
+    submit = SubmitField('Confirm')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -89,3 +89,11 @@ class ResetPasswordForm(FlaskForm):
 
 class SelectRolesForm(FlaskForm):
     role_id = SelectField('Role ID', choices=[], coerce=int)
+
+class AddUserForm(FlaskForm):
+    role_id = SelectField('Role', choices=[], coerce=int)
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Confirm')
