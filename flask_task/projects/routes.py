@@ -10,11 +10,18 @@ projects = Blueprint('projects', __name__)
 
 @projects.route('/project_list', methods=['GET', 'POST'])
 def project_list():
-    form = PerPageForm()
-    page = request.args.get('page', 1, type=int)
-    per_page = form.page_number.data
-    projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
-    return render_template('project_list.html', projects=projects, form=form)
+        form = PerPageForm()
+        page = request.args.get('page', 1, type=int)
+        per_page = form.page_number.data
+        search_query = request.args.get('search_query')
+        if search_query:
+            projects = Project.query.filter(Project.title.contains(search_query) |
+                                              Project.description.contains(search_query)).paginate(page=page,
+                                                                                                   per_page=100)
+            return render_template('project_list.html', projects=projects, form=form)
+        else:
+            projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
+            return render_template('project_list.html', projects=projects, form=form)
 
 
 @projects.route("/project/new", methods=['GET', 'POST'])
