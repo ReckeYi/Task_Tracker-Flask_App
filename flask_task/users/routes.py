@@ -193,12 +193,12 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-# @users.route('/test')
-# def index():
-#     users = User.query
-#     for user in users:
-#         user = user
-#     return render_template('test.html', title='Bootstrap Table', users=users, user=user)
+@users.route('/test')
+def index():
+    users = User.query
+    for user in users:
+        user = user
+    return render_template('test.html', title='Bootstrap Table', users=users, user=user)
 
 @users.route('/users', methods=['GET'])
 @login_required

@@ -2,17 +2,20 @@ from flask import Blueprint, flash, redirect, render_template, url_for, request,
 from flask_login import login_required, current_user
 
 from flask_task.models import User, Project, Task
-from flask_task.projects.forms import ProjectForm
+from flask_task.projects.forms import ProjectForm, PerPageForm
 from flask_task import db
 
 projects = Blueprint('projects', __name__)
 
 
-@projects.route('/project_list')
+@projects.route('/project_list', methods=['GET', 'POST'])
 def project_list():
+    form = PerPageForm()
     page = request.args.get('page', 1, type=int)
-    projects = Project.query.order_by(Project.title).paginate(page=page, per_page=5)
-    return render_template('project_list.html', projects=projects)
+    per_page = form.page_number.data
+    projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
+    return render_template('project_list.html', projects=projects, form=form)
+
 
 @projects.route("/project/new", methods=['GET', 'POST'])
 @login_required
@@ -74,3 +77,6 @@ def delete_project(project_id):
     db.session.commit()
     flash('Your project has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
+
+

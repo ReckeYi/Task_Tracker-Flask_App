@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, TextAreaField, SelectField, SubmitField, IntegerField
+from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class ProjectForm(FlaskForm):
@@ -8,3 +8,9 @@ class ProjectForm(FlaskForm):
     description = TextAreaField('Description', validators=[Length(min=2, max=300)])
     reporter = SelectField('Reporter', choices=[], coerce=int)
     submit = SubmitField('Submit')
+
+
+class PerPageForm(FlaskForm):
+    page_number = IntegerField('Per Page', validators=[DataRequired(), NumberRange(1, 100)])
+    submit = SubmitField('Confirm')
+
