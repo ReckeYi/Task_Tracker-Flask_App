@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <form method="POST" action="">
+    <form method="POST" action=" ">
         <fieldset class="form-group">
             <div class="form-group">
                 {{ form.page_number.label(class="form-control-label") }}
@@ -12,22 +12,28 @@
                             {% endfor %}
                         </div>
                 {% else %}
-                    {{ form.page_number(class="form-control form-control-sm", style="width:fit-content;") }}
+                    {{ form.page_number(class="form-control form-control-sm", style="width:fit-content;", onchange="this.form.submit()") }}
                 {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info btn-sm") }}
             </div>
         </fieldset>
     </form>
+    <script>
+        let page_number_select = document.getElementById('page_number')
+
+        page_number_select.onchange = function() {
+            page_number = page_number_select.value;
+
+            fetch(
+        }
+    </script>
 
     <form method="GET" action="">
         <fieldset class="form-group">
             <div class="form-group">
-                <input class="form-control form-control-sm" style="width:fit-content;" type="search" placeholder="Search" aria-label="Search" name="search_query">
+                {{ form2.searched(class="form-control form-control-sm", style="width:fit-content;", type="search", placeholder="Search") }}
             </div>
             <div class="form-group">
-                <button class="btn btn-outline-info btn-sm" type="submit">Search</button>
+                {{ form2.submit(class="btn btn-outline-info btn-sm") }}
             </div>
         </fieldset>
     </form>
@@ -50,9 +56,9 @@
     {% for page_num in projects.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
             {% if projects.page == page_num %}
-                <a class="btn btn-info mb-4" href="{{ url_for('projects.project_list', page=page_num) }}"> {{ page_num }}</a>
+                <a class="btn btn-info mb-4" href="{{ url_for('projects.project_list', page=page_num, page_number=form.page_number.data, searched=form2.searched.data) }}"> {{ page_num }}</a>
             {% else %}
-                <a class="btn btn-outline-info mb-4" href="{{ url_for('projects.project_list', page=page_num) }}"> {{ page_num }}</a>
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('projects.project_list', page=page_num, page_number=form.page_number.data, searched=form2.searched.data) }}"> {{ page_num }}</a>
             {% endif %}
         {% else %}
             ...

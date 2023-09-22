@@ -2,26 +2,33 @@ from flask import Blueprint, flash, redirect, render_template, url_for, request,
 from flask_login import login_required, current_user
 
 from flask_task.models import User, Project, Task
-from flask_task.projects.forms import ProjectForm, PerPageForm
+from flask_task.projects.forms import ProjectForm, PerPageForm, SearchForm
 from flask_task import db
 
 projects = Blueprint('projects', __name__)
 
 
-@projects.route('/project_list', methods=['GET', 'POST'])
+@projects.route("/project_list", methods=['GET', 'POST'])
+@login_required
 def project_list():
-        form = PerPageForm()
-        page = request.args.get('page', 1, type=int)
+    form = PerPageForm()
+    form2 = SearchForm()
+    page = request.args.get('page', 1, type=int)
+    per_page = form.page_number.data
+    if not per_page:
+        per_page = request.args.get('page_number', 3, type=int)
+    searched = request.args.get('searched')
+    if searched:
         per_page = form.page_number.data
-        search_query = request.args.get('search_query')
-        if search_query:
-            projects = Project.query.filter(Project.title.contains(search_query) |
-                                              Project.description.contains(search_query)).paginate(page=page,
-                                                                                                   per_page=100)
-            return render_template('project_list.html', projects=projects, form=form)
-        else:
-            projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
-            return render_template('project_list.html', projects=projects, form=form)
+        form2.searched.data = searched
+        projects = Project.query.filter(Project.title.ilike('%' + searched + '%') |
+                                        Project.description.ilike('%' + searched + '%')).paginate(page=page,
+                                                                                                  per_page=per_page)
+        return render_template('project_list.html', projects=projects, form=form, form2=form2)
+    else:
+        form.page_number.data = per_page
+        projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
+        return render_template('project_list.html', projects=projects, form=form, form2=form2)
 
 
 @projects.route("/project/new", methods=['GET', 'POST'])
@@ -36,7 +43,7 @@ def new_project():
         db.session.add(project)
         db.session.commit()
         flash('New Project has been created!', 'success')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('projects.project_list'))
     return render_template('create_project.html', title='New Project', form=form, legend='New Project')
 
 
@@ -84,6 +91,3 @@ def delete_project(project_id):
     db.session.commit()
     flash('Your project has been deleted!', 'success')
     return redirect(url_for('main.home'))
-
-
-
