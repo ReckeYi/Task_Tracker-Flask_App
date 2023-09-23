@@ -10,6 +10,7 @@ class Project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = relationship('User', backref='project')
     created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    task = relationship('Task', back_populates='project', cascade='all, delete-orphan')
 
     def __init__(self, title: str, description: str, user_id: int):
         self.title = title

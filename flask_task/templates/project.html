@@ -18,6 +18,9 @@
     </div>
     <div>
         <h5 class="ml-2">Tasklist for {{ project.title }}:</h5>
+        <div>
+            <a class="btn btn-secondary btn-sm mt-0 mb-1 float-right" href="{{ url_for('tasks.add_task_to_current_project', project_id=project.id) }}">Add Task</a><br>
+        </div>
         {% for task in tasks %}
             {% if task %}
                     <div class="media content-section">

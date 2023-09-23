@@ -13,8 +13,10 @@ class ProjectForm(FlaskForm):
 class PerPageForm(FlaskForm):
     page_number = SelectField(u'Per Page', choices=[2, 5, 10, 15, 20, 50], coerce=int)
     submit = SubmitField('Confirm')
+    searched = StringField('Title')
+    search_submit = SubmitField('Searchhh')
 
-class SearchForm(FlaskForm):
-    searched = StringField('Title', validators=[DataRequired()])
-    submit = SubmitField('Searchhh')
+# class SearchForm(FlaskForm):
+#     searched = StringField('Title', validators=[DataRequired()])
+#     submit = SubmitField('Searchhh')
 

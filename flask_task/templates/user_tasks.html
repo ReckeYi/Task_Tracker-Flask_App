@@ -30,7 +30,7 @@
           <a class="btn btn-info mb-4" href="{{ url_for('users.user_tasks', username=current_user.username, page=page_num) }}">
               {{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('users.user_tasks', username=task.user.username, page=page_num) }}">
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('users.user_tasks', username=current_user.username, page=page_num) }}">
               {{ page_num }}</a>
         {% endif %}
       {% else %}

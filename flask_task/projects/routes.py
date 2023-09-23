@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for, request,
 from flask_login import login_required, current_user
 
 from flask_task.models import User, Project, Task
-from flask_task.projects.forms import ProjectForm, PerPageForm, SearchForm
+from flask_task.projects.forms import ProjectForm, PerPageForm
 from flask_task import db
 
 projects = Blueprint('projects', __name__)
@@ -12,23 +12,27 @@ projects = Blueprint('projects', __name__)
 @login_required
 def project_list():
     form = PerPageForm()
-    form2 = SearchForm()
     page = request.args.get('page', 1, type=int)
-    per_page = form.page_number.data
-    if not per_page:
-        per_page = request.args.get('page_number', 3, type=int)
-    searched = request.args.get('searched')
-    if searched:
+
+    if form.is_submitted():
         per_page = form.page_number.data
-        form2.searched.data = searched
+        searched = form.searched.data
+        page = 1
+    else:
+        per_page = request.args.get('page_number', 5, type=int)
+        searched = request.args.get('searched', None, type=str)
+
+    if searched:
+        form.page_number.data = per_page
+        form.searched.data = searched
         projects = Project.query.filter(Project.title.ilike('%' + searched + '%') |
                                         Project.description.ilike('%' + searched + '%')).paginate(page=page,
                                                                                                   per_page=per_page)
-        return render_template('project_list.html', projects=projects, form=form, form2=form2)
+        return render_template('project_list.html', projects=projects, form=form)
     else:
         form.page_number.data = per_page
         projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
-        return render_template('project_list.html', projects=projects, form=form, form2=form2)
+        return render_template('project_list.html', projects=projects, form=form)
 
 
 @projects.route("/project/new", methods=['GET', 'POST'])
@@ -50,6 +54,7 @@ def new_project():
 @projects.route("/project/<int:project_id>", methods=['GET', 'POST'])
 def project(project_id):
     project = Project.query.get_or_404(project_id)
+    # TODO: porject update date + db.session.commit()
     tasks = Task.query.filter_by(project_id=project.id).all()
     return render_template('project.html', title=project.title, project=project, tasks=tasks)
 

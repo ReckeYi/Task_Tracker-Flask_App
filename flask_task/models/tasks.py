@@ -10,7 +10,7 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = relationship('User', backref='task')
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
-    project = relationship('Project', backref='task')
+    project = relationship('Project', back_populates='task')
     deadline = db.Column(db.DateTime, nullable=False, default=None)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=False)
