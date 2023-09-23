@@ -10,6 +10,7 @@ class Project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = relationship('User', backref='project')
     created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    engage = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     task = relationship('Task', back_populates='project', cascade='all, delete-orphan')
 
     def __init__(self, title: str, description: str, user_id: int):
@@ -18,4 +19,4 @@ class Project(db.Model):
         self.user_id = user_id
 
     def __repr__(self):
-        return f"Project('{self.title}', '{self.description}', '{self.user_id}', '{self.created}')"
+        return f"Project('{self.title}', '{self.description}', '{self.user_id}', '{self.created}', '{self.engage}')"

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, flash, redirect, render_template, url_for, request, abort
 from flask_login import login_required, current_user
 
@@ -26,12 +28,11 @@ def project_list():
         form.page_number.data = per_page
         form.searched.data = searched
         projects = Project.query.filter(Project.title.ilike('%' + searched + '%') |
-                                        Project.description.ilike('%' + searched + '%')).paginate(page=page,
-                                                                                                  per_page=per_page)
+                                        Project.description.ilike('%' + searched + '%')).order_by(Project.engage.desc()).paginate(page=page, per_page=per_page)
         return render_template('project_list.html', projects=projects, form=form)
     else:
         form.page_number.data = per_page
-        projects = Project.query.order_by(Project.title).paginate(page=page, per_page=per_page)
+        projects = Project.query.order_by(Project.engage.desc()).paginate(page=page, per_page=per_page)
         return render_template('project_list.html', projects=projects, form=form)
 
 
@@ -54,7 +55,10 @@ def new_project():
 @projects.route("/project/<int:project_id>", methods=['GET', 'POST'])
 def project(project_id):
     project = Project.query.get_or_404(project_id)
-    # TODO: porject update date + db.session.commit()
+    if project:
+        project.engage = datetime.now()
+        db.session.add(project)
+        db.session.commit()
     tasks = Task.query.filter_by(project_id=project.id).all()
     return render_template('project.html', title=project.title, project=project, tasks=tasks)
 
@@ -65,7 +69,6 @@ def update_project(project_id):
     users = User.query.all()
     users_list = [(i.id, i.username) for i in users]
     project = Project.query.get_or_404(project_id)
-    # if project.user_id != current_user.id:
     if current_user.role_id != 1:
         abort(403)
     form = ProjectForm()
@@ -89,10 +92,9 @@ def update_project(project_id):
 @login_required
 def delete_project(project_id):
     project = Project.query.get_or_404(project_id)
-    # if project.user_id != current_user.id:
     if current_user.role_id != 1:
         abort(403)
     db.session.delete(project)
     db.session.commit()
     flash('Your project has been deleted!', 'success')
-    return redirect(url_for('main.home'))
+    return redirect(url_for('projects.project_list'))
