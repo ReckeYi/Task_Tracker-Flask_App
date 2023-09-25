@@ -1,19 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Flask Task - Home Page</h1>
-    <p>Tphis is my pet project...</p>
-    <ul>The list of used technologies and solutions:
-        <li>Python</li>
-        <li>SQL Alchemy</li>
-        <li>Flask</li>
-        <li>...</li>
+<div class="content-section" xmlns="http://www.w3.org/1999/html">
+        <h1>Flask Task - Home Page</h1>
+        <p>This is a pet project created with the goal of gaining practical skills to consolidate knowledge about the Flask framework.</p>
+        <p>A significant functional part of the application goes far beyond the scope of standard applications from tutorials.</p>
+        <p>You can create and edit projects, task lists and configure access levels for users. You can also sort lists, search by keywords, and customize the amount objects displayed on the page. If you forget your account password, you can recover it using the password recovery function.</p>
+        <ul><b>List of used technologies:</b>
+            <li class="ml-4">Flask</li>
+            <li class="ml-4">SQL Alchemy</li>
+            <li class="ml-4">PostgreSQL</li>
+            <li class="ml-4">Alembic</li>
+            <li class="ml-4">Bootstrap</li>
+        </ul>
 
-    Please login to start
-
-After login:<br>
-        1. create Project <br>
-        2. create Task<br>
-        3. number of Projects<br>
-        4. number of Tasks
+    Please <a href="{{ url_for('users.register') }}">register</a> to use all available features
+        <div>
+            <div class="mt-3">
+                <small>
+                Number of projects: <mark>{{ projects_total }}</mark> | Number of tasks: <mark>{{ tasks_total }}</mark> | Number of users: <mark>{{ users_total }}</mark>
+                </small>
+            </div>
+        </div>
+</div>
 
 {% endblock content %}

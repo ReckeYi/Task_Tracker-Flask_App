@@ -4,11 +4,11 @@ from werkzeug import Response
 
 from flask_task import bcrypt, db
 from flask_task.models import User, Role, Project, Task
-from flask_task.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdateUserForm, SelectRolesForm, \
+from flask_task.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, UpdateUserForm, \
     RequestResetForm, ResetPasswordForm, AddUserForm
 from flask_task.users.utils import save_picture, send_reset_email
 
-from typing import Optional, Union
+from typing import Union
 
 users = Blueprint('users', __name__)
 
@@ -146,20 +146,6 @@ def user_tasks(username):
     if current_user.role_id != 1:
         abort(403)
     return render_template('user_tasks.html', tasks=tasks, user=user)
-
-
-# @users.route('/users', methods=['GET'])
-# @login_required
-# def users_list():
-#     page = request.args.get('page', 1, type=int)
-#     users = User.query.order_by(User.username).paginate(page=page, per_page=10)
-#     roles = Role.query.all()
-#     roles_list = [(i.id, i.role) for i in roles]
-#     form = SelectRolesForm()
-#     form.role_id.choices = roles_list
-#     if current_user.role_id != 1:
-#         abort(403)
-#     return render_template('users.html', page=page, users=users, form=form)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
