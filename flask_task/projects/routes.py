@@ -7,12 +7,15 @@ from flask_task.models import User, Project, Task
 from flask_task.projects.forms import ProjectForm, PerPageForm
 from flask_task import db
 
+from werkzeug import Response
+from typing import Union
+
 projects = Blueprint('projects', __name__)
 
 
 @projects.route("/project_list", methods=['GET', 'POST'])
 @login_required
-def project_list():
+def project_list() -> str:
     form = PerPageForm()
     page = request.args.get('page', 1, type=int)
 
@@ -38,7 +41,7 @@ def project_list():
 
 @projects.route("/project/new", methods=['GET', 'POST'])
 @login_required
-def new_project():
+def new_project() -> Union[Response, str]:
     users = User.query.all()
     users_list = [(i.id, i.username) for i in users]
     form = ProjectForm()
@@ -53,7 +56,7 @@ def new_project():
 
 
 @projects.route("/project/<int:project_id>", methods=['GET', 'POST'])
-def project(project_id):
+def project(project_id) -> str:
     project = Project.query.get_or_404(project_id)
     if project:
         project.engage = datetime.now()
@@ -65,7 +68,7 @@ def project(project_id):
 
 @projects.route("/project/<int:project_id>/update", methods=['GET', 'POST'])
 @login_required
-def update_project(project_id):
+def update_project(project_id) -> Union[Response, str]:
     users = User.query.all()
     users_list = [(i.id, i.username) for i in users]
     project = Project.query.get_or_404(project_id)
@@ -90,7 +93,7 @@ def update_project(project_id):
 
 @projects.route("/project/<int:project_id>/delete", methods=['POST'])
 @login_required
-def delete_project(project_id):
+def delete_project(project_id) -> Response:
     project = Project.query.get_or_404(project_id)
     if current_user.role_id != 1:
         abort(403)

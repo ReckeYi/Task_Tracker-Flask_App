@@ -1,5 +1,6 @@
 import os
 import secrets
+from typing import Any
 
 from PIL import Image
 from flask import url_for
@@ -8,7 +9,7 @@ from flask import current_app
 from flask_task import mail
 
 
-def save_picture(form_picture):
+def save_picture(form_picture: Any) -> str:
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
@@ -19,7 +20,8 @@ def save_picture(form_picture):
     i.save(picture_path)
     return picture_fn
 
-def send_reset_email(user):
+
+def send_reset_email(user: Any) -> None:
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
                   sender='devlog-tests@yandex.ru',

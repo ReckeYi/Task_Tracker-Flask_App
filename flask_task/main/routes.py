@@ -6,7 +6,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 @main.route('/home')
-def home():
+def home() -> str:
     users_total = User.query.count()
     tasks_total = Task.query.count()
     projects_total = Project.query.count()

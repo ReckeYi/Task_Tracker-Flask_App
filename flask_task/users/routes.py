@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, url_for, flash, render_template, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug import Response
+from typing import Union, Any
 
 from flask_task import bcrypt, db
 from flask_task.models import User, Role, Project, Task
@@ -8,9 +9,8 @@ from flask_task.users.forms import RegistrationForm, LoginForm, UpdateAccountFor
     RequestResetForm, ResetPasswordForm, AddUserForm
 from flask_task.users.utils import save_picture, send_reset_email
 
-from typing import Union
-
 users = Blueprint('users', __name__)
+
 
 @users.route('/register', methods=['GET', 'POST'])
 def register() -> Union[Response, str]:
@@ -28,7 +28,7 @@ def register() -> Union[Response, str]:
 
 
 @users.route('/login', methods=['GET', 'POST'])
-def login():
+def login() -> Union[Response, str]:
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = LoginForm()
@@ -44,13 +44,14 @@ def login():
 
 
 @users.route('/logout')
-def logout():
+def logout() -> Response:
     logout_user()
     return redirect(url_for('main.home'))
 
+
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
-def account():
+def account() -> Union[Response, str]:
     if current_user.role_id == 1:
         roles = Role.query.all()
         roles_list = [(i.id, i.role) for i in roles]
@@ -67,8 +68,6 @@ def account():
         current_user.email = form.email.data
         if current_user.role_id == 1:
             current_user.role_id = form.role_id.data
-        else:
-            None
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
@@ -79,9 +78,10 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+
 @users.route('/user/update/<string:username>', methods=['GET', 'POST'])
 @login_required
-def user_update(username):
+def user_update(username: Any) -> Union[Response, str]:
     user = User.query.filter_by(username=username).first_or_404()
     roles = Role.query.all()
     roles_list = [(i.id, i.role) for i in roles]
@@ -106,9 +106,10 @@ def user_update(username):
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
     return render_template('user_update.html', title='Update User', image_file=image_file, form=form, user=user)
 
+
 @users.route("/user/<int:user_id>/delete", methods=['POST'])
 @login_required
-def delete_user(user_id):
+def delete_user(user_id: Any) -> Response:
     user = User.query.get_or_404(user_id)
     if current_user.role_id != 1:
         abort(403)
@@ -120,7 +121,7 @@ def delete_user(user_id):
 
 @users.route('/user/<string:username>')
 @login_required
-def user_projects(username):
+def user_projects(username: Any) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     projects = Project.query.filter_by(user=user).order_by(Project.title).paginate(page=page, per_page=10)
@@ -129,7 +130,7 @@ def user_projects(username):
 
 @users.route('/user/<string:username>/<string:title>')
 @login_required
-def user_project_tasks(username, title):
+def user_project_tasks(username: Any, title: Any) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     project = Project.query.filter_by(title=title).first_or_404()
@@ -139,7 +140,7 @@ def user_project_tasks(username, title):
 
 @users.route('/user/tasks/<string:username>')
 @login_required
-def user_tasks(username):
+def user_tasks(username: Any) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     tasks = Task.query.filter_by(user=user).order_by(Task.title).paginate(page=page, per_page=10)
@@ -149,7 +150,7 @@ def user_tasks(username):
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
-def reset_request():
+def reset_request() -> Union[Response, str]:
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RequestResetForm()
@@ -162,7 +163,7 @@ def reset_request():
 
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token):
+def reset_token(token: Any) -> Union[Response, str]:
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
@@ -181,15 +182,16 @@ def reset_token(token):
 
 @users.route('/users', methods=['GET'])
 @login_required
-def users_list():
+def users_list() -> str:
     users = User.query
     if current_user.role_id != 1:
         abort(403)
     return render_template('users.html', title='All Users', users=users)
 
+
 @users.route('/add_user', methods=['GET', 'POST'])
 @login_required
-def add_user():
+def add_user() -> Union[Response, str]:
     roles = Role.query.all()
     roles_list = [(i.id, i.role) for i in roles]
     if current_user.role_id != 1:
@@ -205,4 +207,3 @@ def add_user():
         flash('User has been created! You are now able to log in', 'success')
         return redirect(url_for('users.users_list'))
     return render_template('add_user.html', title='Register', form=form)
-

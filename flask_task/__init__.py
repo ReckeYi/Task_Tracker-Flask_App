@@ -1,3 +1,5 @@
+from typing import Type
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -17,7 +19,7 @@ login_manager.login_message_category = 'info'
 mail = Mail()
 
 
-def create_app(config_class=Config):
+def create_app(config_class: Type[Config] = Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
 

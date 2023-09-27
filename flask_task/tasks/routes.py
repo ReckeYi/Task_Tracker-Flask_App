@@ -5,12 +5,15 @@ from flask_task import db
 from flask_task.models import Project, Status, User, Task
 from flask_task.tasks.forms import TaskForm, ProjectTaskForm
 
+from werkzeug import Response
+from typing import Union, Any
+
 tasks = Blueprint('tasks', __name__)
 
 
 @tasks.route("/task/new", methods=['GET', 'POST'])
 @login_required
-def new_task():
+def new_task() -> Union[Response, str]:
     projects = Project.query.all()
     project_list = [(i.id, i.title) for i in projects]
     statuses = Status.query.all()
@@ -32,7 +35,7 @@ def new_task():
 
 @tasks.route("/task/add/<int:project_id>", methods=['GET', 'POST'])
 @login_required
-def add_task_to_current_project(project_id):
+def add_task_to_current_project(project_id: Any) -> Union[Response, str]:
     project = Project.query.get_or_404(project_id)
     projects = Project.query.all()
     project_list = [(i.id, i.title) for i in projects]
@@ -57,14 +60,14 @@ def add_task_to_current_project(project_id):
 
 
 @tasks.route("/task/<int:task_id>", methods=['GET', 'POST'])
-def task(task_id):
+def task(task_id: Any) -> str:
     task = Task.query.get_or_404(task_id)
     return render_template('task.html', title=task.title, task=task)
 
 
 @tasks.route("/task/<int:task_id>/update", methods=['GET', 'POST'])
 @login_required
-def update_task(task_id):
+def update_task(task_id: Any) -> Union[Response, str]:
     projects = Project.query.all()
     project_list = [(i.id, i.title) for i in projects]
     statuses = Status.query.all()
@@ -101,7 +104,7 @@ def update_task(task_id):
 
 @tasks.route("/task/<int:task_id>/delete", methods=['POST'])
 @login_required
-def delete_task(task_id):
+def delete_task(task_id: Any) -> Response:
     task = Task.query.get_or_404(task_id)
     # if task.user_id != current_user.id:
     if current_user.role_id != 1:

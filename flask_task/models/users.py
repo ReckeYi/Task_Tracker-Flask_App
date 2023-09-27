@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 from sqlalchemy.orm import relationship
 from flask import current_app
 from flask_task import db, login_manager
@@ -6,7 +8,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id: Any) -> Any:
     return User.query.get(int(user_id))
 
 
@@ -19,12 +21,12 @@ class User(db.Model, UserMixin):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     roles = relationship('Role', backref='user')
 
-    def get_reset_token(self, expires_sec=1800):
+    def get_reset_token(self, expires_sec: int = 1800) -> str:
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
     @staticmethod
-    def verify_reset_token(token):
+    def verify_reset_token(token: Any) -> Optional[Any]:
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']

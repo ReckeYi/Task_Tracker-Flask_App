@@ -12,8 +12,14 @@
             <li class="ml-4">Alembic</li>
             <li class="ml-4">Bootstrap</li>
         </ul>
-
-    Please <a href="{{ url_for('users.register') }}">register</a> to use all available features
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('projects.new_project') }}">Create New Project</a> |
+        <a href="{{ url_for('tasks.new_task') }}">Add New Task</a> |
+        <a href="{{ url_for('users.account') }}">Edit Your Account</a> |
+        <a href="{{ url_for('users.user_tasks', username=current_user.username) }}">Your Tasks</a>
+    {% else %}
+        Please <a href="{{ url_for('users.register') }}">register</a> to use all available features
+    {% endif %}
         <div>
             <div class="mt-3">
                 <small>
