@@ -35,10 +35,12 @@ def create_app(config_class: Type[Config] = Config) -> Flask:
     from flask_task.tasks.routes import tasks
     from flask_task.main.routes import main
     from flask_task.errors.handlers import errors
+    from flask_task.dummy_data.routes import dummy_data
     app.register_blueprint(users)
     app.register_blueprint(projects)
     app.register_blueprint(tasks)
     app.register_blueprint(main)
     app.register_blueprint(errors)
+    app.register_blueprint(dummy_data)
 
     return app

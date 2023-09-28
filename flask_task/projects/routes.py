@@ -31,8 +31,10 @@ def project_list() -> str:
         form.page_number.data = per_page
         form.searched.data = searched
         projects = Project.query.filter(Project.title.ilike('%' + searched + '%') |
-                                        Project.description.ilike('%' + searched + '%')).order_by(Project.engage.desc()).paginate(page=page, per_page=per_page)
-        return render_template('project_list.html', projects=projects, form=form)
+                                        Project.description.ilike('%' + searched + '%'))\
+                                        .order_by(Project.engage.desc())\
+                                        .paginate(page=page, per_page=per_page)
+        return render_template('project_list.html',projects=projects, form=form)
     else:
         form.page_number.data = per_page
         projects = Project.query.order_by(Project.engage.desc()).paginate(page=page, per_page=per_page)
