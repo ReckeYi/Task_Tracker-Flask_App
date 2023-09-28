@@ -18,7 +18,7 @@ You can create and edit projects, task lists and configure access levels for use
   1. Download project
   2. Install modules from requirements.txt
   3. Setup config file
-  4. Setup FLASK_APP environment variable: $env:FLASK_APP="[run.py](http://run.py/)"
+  4. Setup FLASK_APP environment variable: $env:FLASK_APP="run.py"
   5. Setup a database in command window:
      - Init datda base: flask db init
      - Create initial migration: flask db migrate -m 'Initial migration’
