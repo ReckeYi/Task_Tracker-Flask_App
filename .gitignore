@@ -163,3 +163,4 @@ cython_debug/
 /migrations/
 /flask_task/temp2.py
 /migrations/versions/
+/flask_task/temp.py
