@@ -39,9 +39,9 @@ You can create and edit projects, task lists and configure access levels for use
         ```
         flask db init
         ```
-     - Create initial migration: flask db migrate -m 'Initial migration’
+     - Create initial migration:
        ```
-        flask db migrate -m 'Initial
+        flask db migrate -m 'Initial migration’
        ```
      - Upgrade database: flask db upgrade
        ```
@@ -50,7 +50,7 @@ You can create and edit projects, task lists and configure access levels for use
   8. **Run the app**: run the 'run.py' file
   9. **Open [/home](http://127.0.0.1:5000/) page**
   10. **Push ‘Add Dummy Data’ button** to add some dummy data to your database
-  11. **Open the templates/home.html file and delete** code from line 32:
+  11. Optional: **Open the templates/home.html file and delete** code from line 32:
        ```html
        <p><a href="{{ url_for('dummy_data.add_dummy_data') }}"><button type="button" class="btn btn-sm btn-danger">Add Dummy Data</button></a></p>
        ```
