@@ -19,7 +19,7 @@ login_manager.login_message_category = 'info'
 mail = Mail()
 
 
-def create_app(config_class: Type[Config] = Config) -> Flask:
+def create_app(config_class=Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
 

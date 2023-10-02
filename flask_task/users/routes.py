@@ -81,12 +81,13 @@ def account() -> Union[Response, str]:
 
 @users.route('/user/update/<string:username>', methods=['GET', 'POST'])
 @login_required
-def user_update(username: Any) -> Union[Response, str]:
+def user_update(username: str) -> Union[Response, str]:
     user = User.query.filter_by(username=username).first_or_404()
     roles = Role.query.all()
     roles_list = [(i.id, i.role) for i in roles]
     form = UpdateUserForm()
     form.role_id.choices = roles_list
+    form.edited_user = user
     if current_user.role_id != 1:
         abort(403)
     if form.validate_on_submit():
@@ -109,7 +110,7 @@ def user_update(username: Any) -> Union[Response, str]:
 
 @users.route("/user/<int:user_id>/delete", methods=['POST'])
 @login_required
-def delete_user(user_id: Any) -> Response:
+def delete_user(user_id: int) -> Response:
     user = User.query.get_or_404(user_id)
     if current_user.role_id != 1:
         abort(403)
@@ -121,32 +122,32 @@ def delete_user(user_id: Any) -> Response:
 
 @users.route('/user/<string:username>')
 @login_required
-def user_projects(username: Any) -> str:
+def user_projects(username: str) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     projects = Project.query.filter_by(user=user).order_by(Project.title).paginate(page=page, per_page=10)
-    return render_template('user_projects.html', projects=projects, user=user)
+    return render_template('user_projects.html', title='User Projects', projects=projects, user=user)
 
 
 @users.route('/user/<string:username>/<string:title>')
 @login_required
-def user_project_tasks(username: Any, title: Any) -> str:
+def user_project_tasks(username: str, title: Any) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     project = Project.query.filter_by(title=title).first_or_404()
     tasks = Task.query.filter_by(user=user, project=project).order_by(Task.title).paginate(page=page, per_page=10)
-    return render_template('user_project_tasks.html', tasks=tasks, user=user, project=project)
+    return render_template('user_project_tasks.html', title='User Project Tasks', tasks=tasks, user=user, project=project)
 
 
 @users.route('/user/tasks/<string:username>')
 @login_required
-def user_tasks(username: Any) -> str:
+def user_tasks(username: str) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     tasks = Task.query.filter_by(user=user).order_by(Task.title).paginate(page=page, per_page=10)
     if current_user.role_id != 1:
         abort(403)
-    return render_template('user_tasks.html', tasks=tasks, user=user)
+    return render_template('user_tasks.html', title='User Tasks', tasks=tasks, user=user)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
@@ -183,10 +184,10 @@ def reset_token(token: Any) -> Union[Response, str]:
 @users.route('/users', methods=['GET'])
 @login_required
 def users_list() -> str:
-    users = User.query
+    users_q = User.query
     if current_user.role_id != 1:
         abort(403)
-    return render_template('users.html', title='All Users', users=users)
+    return render_template('users.html', title='All Users', users=users_q)
 
 
 @users.route('/add_user', methods=['GET', 'POST'])

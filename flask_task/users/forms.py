@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from flask_task.models import Project, Task, User
 
 from flask_task.models import User
 
@@ -55,20 +56,22 @@ class UpdateAccountForm(FlaskForm):
 
 
 class UpdateUserForm(FlaskForm):
+
     role_id = SelectField('Role', choices=[], coerce=int)
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
+    edited_user = None
 
     def validate_username(self, username: Any) -> Any:
-        if username.data == username:
+        if self.edited_user and username.data != self.edited_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email: Any) -> Any:
-        if email.data == email:
+        if self.edited_user and email.data != self.edited_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')

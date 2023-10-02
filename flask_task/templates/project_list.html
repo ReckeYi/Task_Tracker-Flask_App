@@ -3,32 +3,47 @@
     <h1>All Projects</h1>
     <form method="POST" action=" ">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="form-group">
-                {{ form.page_number.label(class="form-control-label") }}
-                {% if form.page_number.errors %}
-                    {{ form.page_number(class="form-control form-control-sm is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.page_number.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                {% else %}
-                    {{ form.page_number(class="form-control form-control-sm", style="width:fit-content;", onchange="this.form.submit()") }}
-                {% endif %}
+        <div class="" style="text-align: right;">
+            <fieldset class="d-inline-block">
+                <div class="d-inline-block">
+                    {{ form.searched(class="form-control form-control-sm", style="width:fit-content;", type="search", placeholder="Search") }}
+                </div>
+                <div class="d-inline-block">
+                    {{ form.search_submit(class="btn btn-outline-info btn-sm") }}
+                </div>
+            </fieldset>
+        </div>
+        <div class="d-flex" style="width: 100%;">
+
+            <fieldset class="d-inline-block">
+                <div class="d-inline-block">
+                    {{ form.page_number.label(class="form-control-label d-inline-block") }}
+                    {% if form.page_number.errors %}
+                        {{ form.page_number(class="form-control form-control-sm is-invalid") }}
+                            <div class="invalid-feedback ">
+                                {% for error in form.page_number.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                    {% else %}
+                        {{ form.page_number(class="form-control form-control-sm", style="width:fit-content;", onchange="this.form.submit()") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="spacer"></div>
+            <div class="" style="text-align: right;">
+                <a class="btn btn-secondary btn-sm mt-0 mb-4 mt-4" href="{{ url_for('projects.new_project') }}" >Create Project</a>
             </div>
-        </fieldset>
-        <fieldset class="form-group">
-            <div class="form-group">
-                {{ form.searched(class="form-control form-control-sm", style="width:fit-content;", type="search", placeholder="Search") }}
-            </div>
-            <div class="form-group">
-                {{ form.search_submit(class="btn btn-outline-info btn-sm") }}
-            </div>
-        </fieldset>
+
+        </div>
+
+
     </form>
 
-    <a class="btn btn-secondary btn-sm mt-0 mb-4" href="{{ url_for('projects.new_project') }}">Create Project</a>
+    <div >
+
+    </div>
+
 
     {% for project in projects.items %}
         <project class="media content-section">

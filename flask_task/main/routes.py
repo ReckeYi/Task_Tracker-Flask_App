@@ -4,6 +4,7 @@ from flask_task.models import Project, Task, User
 
 main = Blueprint('main', __name__)
 
+
 @main.route('/')
 @main.route('/home')
 def home() -> str:
