@@ -7,6 +7,8 @@ from flask_task.models import Role, Status, Task, Project, User
 app = create_test_app()
 
 '''DATABASE'''
+
+
 @pytest.fixture(scope='session', autouse=True)
 def setup_db():
     with app.app_context():
@@ -32,9 +34,17 @@ def setup_db():
         for status in statuses:
             db.session.add(status)
 
+        user = User(username='test', email='test@test.test', password='test', role_id=1)
+        db.session.add(user)
+
+        project = Project(title='Test Project', description='Description of a project', user_id=1)
+        db.session.add(project)
+
         db.session.commit()
 
+
 '''MODELS'''
+
 
 @pytest.fixture
 def users():
@@ -49,13 +59,9 @@ def users():
 @pytest.fixture
 def projects():
     with app.app_context():
-        users = User.query.all()
-        for user in users:
-            user_id = user.id
-
         projects = [
-            Project(title='Project TT1', description='Description of a project', user_id=user_id),
-            Project(title='Project TT2', description='Description of a project', user_id=user_id)
+            Project(title='Project TT1', description='Description of a project', user_id=1),
+            Project(title='Project TT2', description='Description of a project', user_id=1)
         ]
 
     return projects
@@ -64,18 +70,10 @@ def projects():
 @pytest.fixture
 def tasks():
     with app.app_context():
-        users = User.query.all()
-        for user in users:
-            user_id = user.id
-
-        projects = Project.query.all()
-        for project in projects:
-            project_id = project.id
-
         tasks = [
-            Task(title='Task TT1', description='Task Description', user_id=user_id, project_id=project_id,
+            Task(title='Task TT1', description='Task Description', user_id=1, project_id=1,
                  deadline=datetime.today(), status_id=2),
-            Task(title='Task TT2', description='Task Description', user_id=user_id, project_id=project_id,
+            Task(title='Task TT2', description='Task Description', user_id=1, project_id=1,
                  deadline=datetime.today(), status_id=2)
         ]
 

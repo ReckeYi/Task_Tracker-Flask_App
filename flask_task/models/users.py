@@ -8,7 +8,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 @login_manager.user_loader
-def load_user(user_id: Any) -> Any:
+def load_user(user_id: int) -> int:
     return User.query.get(int(user_id))
 
 
