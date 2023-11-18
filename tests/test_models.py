@@ -14,7 +14,7 @@ class TestModels:
             user_q = User.query.filter_by(username='test').first()
             assert User.query.count() == 3
             assert User.query.first() is not None
-            assert user_q.email == 'test@test.test'
+            assert user_q.email == 'test@test.com'
 
             reset_token = user.get_reset_token()
             assert isinstance(reset_token, str) and len(reset_token) > 0
@@ -35,7 +35,7 @@ class TestModels:
             assert project_q.title == 'Project TT1'
             assert project_q.user_id == 1
             assert project_q.user.username == 'test'
-            assert project_q.user.email == 'test@test.test'
+            assert project_q.user.email == 'test@test.com'
 
     def test_count_tasks(self, tasks):
         with app.app_context():

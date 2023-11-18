@@ -1,13 +1,15 @@
 from datetime import datetime
 
 import pytest
+from flask_bcrypt import Bcrypt
+
 from flask_task import create_test_app, db
 from flask_task.models import Role, Status, Task, Project, User
 
 app = create_test_app()
+bcrypt = Bcrypt()
 
 '''DATABASE'''
-
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_db():
@@ -34,13 +36,22 @@ def setup_db():
         for status in statuses:
             db.session.add(status)
 
-        user = User(username='test', email='test@test.test', password='test', role_id=1)
+        hashed_test_password = bcrypt.generate_password_hash('test').decode('utf-8')
+
+        user = User(username='test', email='test@test.com', password=hashed_test_password, role_id=1)
         db.session.add(user)
 
         project = Project(title='Test Project', description='Description of a project', user_id=1)
         db.session.add(project)
 
         db.session.commit()
+
+@pytest.fixture
+def client():
+    app.testing = True
+    client = app.test_client()
+
+    return client
 
 
 '''MODELS'''
@@ -49,9 +60,10 @@ def setup_db():
 @pytest.fixture
 def users():
     with app.app_context():
+        hashed_password = bcrypt.generate_password_hash('test').decode('utf-8')
         users = [
-            User(username='Devlog', email='devlog@delvog.com', password='password', role_id=1),
-            User(username='Admin', email='admin@admin.com', password='password', role_id=2)
+            User(username='Devlog', email='devlog@delvog.com', password=hashed_password, role_id=1),
+            User(username='Admin', email='admin@admin.com', password=hashed_password, role_id=2)
         ]
     return users
 
