@@ -13,6 +13,7 @@ class Config:
 
 
 class TestConfig:
+    WTF_CSRF_ENABLED = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:asdasdasd@localhost:5432/flask_test'
     MAIL_SERVER = 'smtp.yandex.ru'

@@ -9,7 +9,17 @@ from flask_task.models import Role, Status, Task, Project, User
 app = create_test_app()
 bcrypt = Bcrypt()
 
+
+@pytest.fixture
+def client():
+    app.testing = True
+    client = app.test_client()
+
+    return client
+
+
 '''DATABASE'''
+
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_db():
@@ -45,13 +55,6 @@ def setup_db():
         db.session.add(project)
 
         db.session.commit()
-
-@pytest.fixture
-def client():
-    app.testing = True
-    client = app.test_client()
-
-    return client
 
 
 '''MODELS'''
