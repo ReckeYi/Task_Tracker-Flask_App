@@ -12,6 +12,6 @@ class TestRegistration:
             'confirm_password': hashed_password,
             'submit': True
         }, follow_redirects=True)
-
         assert response.status_code == 200
+
         assert b'Your account has been created! You are now able to log in' in response.data
