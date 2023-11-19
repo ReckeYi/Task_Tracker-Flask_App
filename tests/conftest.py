@@ -48,8 +48,13 @@ def setup_db():
 
         hashed_test_password = bcrypt.generate_password_hash('test').decode('utf-8')
 
-        user = User(username='test', email='test@test.com', password=hashed_test_password, role_id=1)
-        db.session.add(user)
+        users = [
+            User(username='test', email='test@test.com', password=hashed_test_password, role_id=1),
+            User(username='test2', email='test2@test.com', password=hashed_test_password, role_id=1)
+        ]
+
+        for user in users:
+            db.session.add(user)
 
         project = Project(title='Test Project', description='Description of a project', user_id=1)
         db.session.add(project)
@@ -93,3 +98,18 @@ def tasks():
         ]
 
     return tasks
+
+
+'''LOGIN'''
+
+
+@pytest.fixture
+def login(client):
+    response = client.post('/login', data={
+        'email': 'test@test.com',
+        'password': 'test',
+        'remember': True,
+        'submit': True,
+    }, follow_redirects=True)
+
+    return login

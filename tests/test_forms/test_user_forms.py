@@ -1,5 +1,6 @@
 from flask_task import create_test_app
-from flask_task.users.forms import LoginForm, RegistrationForm, UpdateAccountForm
+
+from flask_task.users.forms import LoginForm, RegistrationForm
 from flask_bcrypt import Bcrypt
 
 app = create_test_app()
@@ -45,8 +46,8 @@ class TestRegistrationForm:
     def test_valid_registration(self):
         with app.app_context():
             form = RegistrationForm(
-                username='test_user2',
-                email='test_user2@test.com',
+                username='test3',
+                email='test3@test.com',
                 password='password',
                 confirm_password='password',
                 submit=True

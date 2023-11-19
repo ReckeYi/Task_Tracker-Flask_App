@@ -42,13 +42,13 @@ class UpdateAccountForm(FlaskForm):
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
-    def validate_username(self, username: Any) -> Any:
+    def validate_username(self, username) -> username:
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
 
-    def validate_email(self, email: Any) -> Any:
+    def validate_email(self, email) -> email:
         if email.data != current_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
@@ -64,13 +64,13 @@ class UpdateUserForm(FlaskForm):
     submit = SubmitField('Update')
     edited_user = None
 
-    def validate_username(self, username: Any) -> Any:
+    def validate_username(self, username) -> username:
         if self.edited_user and username.data != self.edited_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
 
-    def validate_email(self, email: Any) -> Any:
+    def validate_email(self, email) -> email:
         if self.edited_user and email.data != self.edited_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
@@ -81,7 +81,7 @@ class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
 
-    def validate_email(self, email: Any) -> Any:
+    def validate_email(self, email) -> email:
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('There is no account with that email. You must register first.')

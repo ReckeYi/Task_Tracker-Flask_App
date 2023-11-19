@@ -2,6 +2,7 @@ from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
+
 class TestRegistration:
     def test_register_route(self, client):
         hashed_password = bcrypt.generate_password_hash('test_password').decode('utf-8')
@@ -13,5 +14,4 @@ class TestRegistration:
             'submit': True
         }, follow_redirects=True)
         assert response.status_code == 200
-
         assert b'Your account has been created! You are now able to log in' in response.data

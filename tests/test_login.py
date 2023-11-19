@@ -1,3 +1,8 @@
+from flask_task import create_test_app
+
+app = create_test_app()
+
+
 class TestLogin:
     def test_login(self, client):
         '''This piece of code is required for testing with CSRF'''
@@ -21,12 +26,10 @@ class TestLogin:
             'submit': True,
             # 'csrf_token': csrf_token_value
         }, follow_redirects=True)
-
         assert response.status_code == 200
         assert b'<h1>Flask Task - Home Page</h1>' in response.data
 
     def test_wrong_login(self, client):
-
         response = client.post('/login', data={
             'email': 'test@test.com',
             'password': 'wrongpassword',
@@ -36,3 +39,9 @@ class TestLogin:
 
         assert b'Login Unsuccessful. Please check email and password' in response.data
         assert b'<title>Flask Task - Login</title>' in response.data
+
+    def test_user_is_authenticated(self, client, login):
+        response = client.get('/login')
+        assert response.status_code == 302
+        response = client.get('/project_list')
+        assert response.status_code == 200

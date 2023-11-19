@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, flash, render_template, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug import Response
-from typing import Union, Any
+from typing import Union
 
 from flask_task import bcrypt, db
 from flask_task.models import User, Role, Project, Task
@@ -131,7 +131,7 @@ def user_projects(username: str) -> str:
 
 @users.route('/user/<string:username>/<string:title>')
 @login_required
-def user_project_tasks(username: str, title: Any) -> str:
+def user_project_tasks(username: str, title: str) -> str:
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     project = Project.query.filter_by(title=title).first_or_404()
@@ -164,7 +164,7 @@ def reset_request() -> Union[Response, str]:
 
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token: Any) -> Union[Response, str]:
+def reset_token(token: str) -> Union[Response, str]:
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
