@@ -1,7 +1,3 @@
-from flask_task import create_test_app
-
-app = create_test_app()
-
 
 class TestLogin:
     def test_login(self, client):
@@ -29,7 +25,18 @@ class TestLogin:
         assert response.status_code == 200
         assert b'<h1>Flask Task - Home Page</h1>' in response.data
 
-    def test_wrong_login(self, client):
+    def test_login_invalid_email(self, client):
+        response = client.post('/login', data={
+            'email': 'wrongtest@test.com',
+            'password': 'test',
+            'remember': False,
+            'submit': True,
+        }, follow_redirects=True)
+
+        assert b'Login Unsuccessful. Please check email and password' in response.data
+        assert b'<title>Flask Task - Login</title>' in response.data
+
+    def test_login_invalid_password(self, client):
         response = client.post('/login', data={
             'email': 'test@test.com',
             'password': 'wrongpassword',

@@ -4,9 +4,9 @@ from flask_task.models import User
 app = create_test_app()
 
 
-class TestUpdateAccountForm:
+class TestUpdateAccount:
 
-    def test_valid_update_account(self, client, login):
+    def test_update_account_valid(self, client, login):
         response = client.post('/account', data={
             'role_id': 1,
             'username': 'test-test',
@@ -20,7 +20,7 @@ class TestUpdateAccountForm:
             updated_user = User.query.filter_by(username='test-test').first()
             assert updated_user is not None
 
-    def test_duplicate_username_update_account(self, client, login):
+    def test_update_account_duplicate_username(self, client, login):
         response = client.post(
             '/account', data={
                 'role_id': 1,
@@ -32,11 +32,11 @@ class TestUpdateAccountForm:
         )
         assert b'That username is taken. Please choose a different one.' in response.data
 
-    def test_duplicate_email_update_account(self, client, login):
+    def test_update_account_duplicate_email(self, client, login):
         response = client.post(
             '/account', data={
                 'role_id': 1,
-                'username': 'test',
+                'username': 'test-test',
                 'email': 'test2@test.com',
                 'picture': None,
                 'submit': True

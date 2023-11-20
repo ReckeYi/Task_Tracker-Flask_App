@@ -207,4 +207,4 @@ def add_user() -> Union[Response, str]:
         db.session.commit()
         flash('User has been created! You are now able to log in', 'success')
         return redirect(url_for('users.users_list'))
-    return render_template('add_user.html', title='Register', form=form)
+    return render_template('add_user.html', title='Add User', form=form)
