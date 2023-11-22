@@ -58,8 +58,13 @@ def setup_db():
         for user in users:
             db.session.add(user)
 
-        project = Project(title='Test Project', description='Description of a project', user_id=1)
-        db.session.add(project)
+        projects = [
+            Project(title='Test Project', description='Description of a project', user_id=1),
+            Project(title='Test Project2', description='Description of a project', user_id=1),
+            Project(title='Test Project2', description='Description of a project', user_id=1)
+        ]
+        for project in projects:
+            db.session.add(project)
 
         db.session.commit()
 

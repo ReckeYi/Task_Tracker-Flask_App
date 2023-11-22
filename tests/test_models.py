@@ -30,7 +30,7 @@ class TestModels:
             db.session.commit()
 
             project_q = Project.query.filter_by(title='Project TT1').first()
-            assert Project.query.count() == 3
+            assert Project.query.count() == 5
             assert project_q is not None
             assert project_q.title == 'Project TT1'
             assert project_q.user_id == 1
