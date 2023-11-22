@@ -30,7 +30,8 @@ class TestNewProject:
                 'description': 'Description of a project',
                 'reporter': 1,
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
         assert response.status_code == 200
         assert b'New Project has been created!' in response.data
@@ -60,7 +61,8 @@ class TestUpdateProject:
                 'description': 'Description of a project',
                 'reporter': 1,
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
 
         assert response.status_code == 200

@@ -22,11 +22,14 @@ class TestResetToken:
         with app.app_context():
             user = User.query.filter_by(email='test4@test.com').first()
             reset_token = user.get_reset_token()
-        response = client.post('/reset_password/' + reset_token,
-                               data={
-                                   'password': 'new_password',
-                                   'confirm_password': 'new_password'
-                               }, follow_redirects=True)
+        response = client.post(
+            '/reset_password/' + reset_token,
+            data={
+                'password': 'new_password',
+                'confirm_password': 'new_password'
+                },
+            follow_redirects=True
+        )
         assert response.status_code == 200
         assert b'Your password has been updated! You are now able to log in' in response.data
         assert b'<title>Flask Task - Login</title>' in response.data

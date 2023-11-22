@@ -9,6 +9,8 @@ from flask_task.models import Role, Status, Task, Project, User
 app = create_test_app()
 bcrypt = Bcrypt()
 
+'''APP'''
+
 
 @pytest.fixture
 def client():
@@ -49,30 +51,80 @@ def setup_db():
         hashed_test_password = bcrypt.generate_password_hash('test').decode('utf-8')
 
         users = [
-            User(username='test', email='test@test.com', password=hashed_test_password, role_id=1),
-            User(username='test2', email='test2@test.com', password=hashed_test_password, role_id=1),
-            User(username='test3', email='test3@test.com', password=hashed_test_password, role_id=1),
-            User(username='test4', email='test4@test.com', password=hashed_test_password, role_id=1)
+            User(
+                username='test',
+                email='test@test.com',
+                password=hashed_test_password,
+                role_id=1
+            ),
+            User(
+                username='test2',
+                email='test2@test.com',
+                password=hashed_test_password,
+                role_id=1
+            ),
+            User(
+                username='test3',
+                email='test3@test.com',
+                password=hashed_test_password,
+                role_id=1
+            ),
+            User(
+                username='test4',
+                email='test4@test.com',
+                password=hashed_test_password,
+                role_id=1
+            )
         ]
 
         for user in users:
             db.session.add(user)
 
         projects = [
-            Project(title='Test Project', description='Description of a project', user_id=1),
-            Project(title='Test Project2', description='Description of a project', user_id=1),
-            Project(title='Test Project2', description='Description of a project', user_id=1)
+            Project(
+                title='Test Project',
+                description='Description of a project',
+                user_id=1
+            ),
+            Project(
+                title='Test Project2',
+                description='Description of a project',
+                user_id=1
+            ),
+            Project(
+                title='Test Project2',
+                description='Description of a project',
+                user_id=1
+            )
         ]
         for project in projects:
             db.session.add(project)
 
         tasks = [
-            Task(title='Test Task 1', description='Task Description', user_id=1, project_id=1,
-                 deadline=datetime.today(), status_id=1),
-            Task(title='Test Task 2', description='Task Description', user_id=1, project_id=1,
-                 deadline=datetime.today(), status_id=1),
-            Task(title='Test Task 3', description='Task Description', user_id=1, project_id=1,
-                 deadline=datetime.today(), status_id=1)
+            Task(
+                title='Test Task 1',
+                description='Task Description',
+                user_id=1,
+                project_id=1,
+                deadline=datetime.today(),
+                status_id=1
+            ),
+            Task(
+                title='Test Task 2',
+                description='Task Description',
+                user_id=1,
+                project_id=1,
+                deadline=datetime.today(),
+                status_id=1
+            ),
+            Task(
+                title='Test Task 3',
+                description='Task Description',
+                user_id=1,
+                project_id=1,
+                deadline=datetime.today(),
+                status_id=1
+            )
         ]
         for task in tasks:
             db.session.add(task)
@@ -88,8 +140,18 @@ def users():
     with app.app_context():
         hashed_password = bcrypt.generate_password_hash('test').decode('utf-8')
         users = [
-            User(username='Devlog', email='devlog@delvog.com', password=hashed_password, role_id=1),
-            User(username='Admin', email='admin@admin.com', password=hashed_password, role_id=2)
+            User(
+                username='Devlog',
+                email='devlog@delvog.com',
+                password=hashed_password,
+                role_id=1
+            ),
+            User(
+                username='Admin',
+                email='admin@admin.com',
+                password=hashed_password,
+                role_id=2
+            )
         ]
     return users
 
@@ -98,8 +160,16 @@ def users():
 def projects():
     with app.app_context():
         projects = [
-            Project(title='Project TT1', description='Description of a project', user_id=1),
-            Project(title='Project TT2', description='Description of a project', user_id=1)
+            Project(
+                title='Project TT1',
+                description='Description of a project',
+                user_id=1
+            ),
+            Project(
+                title='Project TT2',
+                description='Description of a project',
+                user_id=1
+            )
         ]
 
     return projects
@@ -109,10 +179,21 @@ def projects():
 def tasks():
     with app.app_context():
         tasks = [
-            Task(title='Task TT1', description='Task Description', user_id=1, project_id=1,
-                 deadline=datetime.today(), status_id=2),
-            Task(title='Task TT2', description='Task Description', user_id=1, project_id=1,
-                 deadline=datetime.today(), status_id=2)
+            Task(
+                title='Task TT1',
+                description='Task Description',
+                user_id=1,
+                project_id=1,
+                deadline=datetime.today(),
+                status_id=2
+            ),
+            Task(
+                title='Task TT2',
+                description='Task Description',
+                user_id=1, project_id=1,
+                deadline=datetime.today(),
+                status_id=2
+            )
         ]
 
     return tasks

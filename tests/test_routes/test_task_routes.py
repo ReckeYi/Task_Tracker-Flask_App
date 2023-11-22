@@ -16,7 +16,8 @@ class TestNewTask:
                 'status_id': '1',
                 'assignee': '1',
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
         assert response.status_code == 200
         assert b'New Task has been created!' in response.data
@@ -37,7 +38,8 @@ class TestNewTask:
                 'status_id': '2',
                 'assignee': '1',
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
         with app.app_context():
             new_task = Task.query.filter_by(title='Test2 Task New').first()
@@ -58,7 +60,8 @@ class TestAddTaskToCurrentProject:
                 'status_id': '1',
                 'assignee': '1',
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
         assert b'New Task has been created!' in response.data
         assert bytes(project.title, 'utf-8') in response.data
@@ -92,7 +95,8 @@ class TestUpdateTask:
                 'status_id': '2',
                 'assignee': '1',
                 'submit': True
-            }, follow_redirects=True
+            },
+            follow_redirects=True
         )
         assert response.status_code == 200
         assert b'Your task has been updated!'

@@ -9,39 +9,45 @@ class TestUserUpdate:
         with app.app_context():
             user = User.query.filter_by(email='test4@test.com').first()
             # username = user.username
-            response = client.post('/user/update/' + user.username, data={
-                'role_id': 1,
-                'username': 'test-update-user',
-                'email': 'test4@test.com',
-                'picture': None,
-                'submit': True
-            }
-                                   )
+            response = client.post(
+                '/user/update/' + user.username,
+                data={
+                    'role_id': 1,
+                    'username': 'test-update-user',
+                    'email': 'test4@test.com',
+                    'picture': None,
+                    'submit': True
+                    }
+            )
             updated_user = User.query.filter_by(username='test-update-user').first()
             assert updated_user is not None
 
     def test_update_account_duplicate_username(self, client, login):
         with app.app_context():
             user = User.query.filter_by(email='test4@test.com').first()
-            response = client.post('/user/update/' + user.username, data={
-                'role_id': 1,
-                'username': 'test2',
-                'email': 'test@test.com',
-                'picture': None,
-                'submit': True
-            }
-                                   )
+            response = client.post(
+                '/user/update/' + user.username,
+                data={
+                    'role_id': 1,
+                    'username': 'test2',
+                    'email': 'test@test.com',
+                    'picture': None,
+                    'submit': True
+                }
+            )
             assert b'That username is taken. Please choose a different one.' in response.data
 
     def test_update_account_duplicate_email(self, client, login):
         with app.app_context():
             user = User.query.filter_by(email='test4@test.com').first()
-            response = client.post('/user/update/' + user.username, data={
-                'role_id': 1,
-                'username': 'test-test',
-                'email': 'test2@test.com',
-                'picture': None,
-                'submit': True
-            }
-                                   )
+            response = client.post(
+                '/user/update/' + user.username,
+                data={
+                    'role_id': 1,
+                    'username': 'test-test',
+                    'email': 'test2@test.com',
+                    'picture': None,
+                    'submit': True
+                }
+            )
             assert b'That email is taken. Please choose a different one.' in response.data
