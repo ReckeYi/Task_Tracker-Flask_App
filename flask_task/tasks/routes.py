@@ -36,7 +36,7 @@ def new_task() -> Union[Response, str]:
 
 @tasks.route("/task/add/<int:project_id>", methods=['GET', 'POST'])
 @login_required
-def add_task_to_current_project(project_id: Any) -> Union[Response, str]:
+def add_task_to_current_project(project_id: int) -> Union[Response, str]:
     project = Project.query.get_or_404(project_id)
     projects = Project.query.all()
     project_list = [(i.id, i.title) for i in projects]
@@ -60,8 +60,8 @@ def add_task_to_current_project(project_id: Any) -> Union[Response, str]:
     return render_template('create_task.html', title='New Task', form=form, project=project, legend='New Task')
 
 
-@tasks.route("/task/<int:task_id>", methods=['GET', 'POST'])
-def task(task_id: Any) -> str:
+@tasks.route("/task/<int:task_id>", methods=['GET'])
+def task(task_id: int) -> int:
     task_q = Task.query.get_or_404(task_id)
     return render_template('task.html', title=task_q.title, task=task_q)
 
@@ -104,7 +104,7 @@ def update_task(task_id: Any) -> Union[Response, str]:
 
 @tasks.route("/task/<int:task_id>/delete", methods=['POST'])
 @login_required
-def delete_task(task_id: Any) -> Response:
+def delete_task(task_id: int) -> Response:
     task_q = Task.query.get_or_404(task_id)
     if current_user.role_id != 1:
         abort(403)

@@ -66,6 +66,17 @@ def setup_db():
         for project in projects:
             db.session.add(project)
 
+        tasks = [
+            Task(title='Test Task 1', description='Task Description', user_id=1, project_id=1,
+                 deadline=datetime.today(), status_id=1),
+            Task(title='Test Task 2', description='Task Description', user_id=1, project_id=1,
+                 deadline=datetime.today(), status_id=1),
+            Task(title='Test Task 3', description='Task Description', user_id=1, project_id=1,
+                 deadline=datetime.today(), status_id=1)
+        ]
+        for task in tasks:
+            db.session.add(task)
+
         db.session.commit()
 
 

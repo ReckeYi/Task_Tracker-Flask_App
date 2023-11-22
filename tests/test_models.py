@@ -44,7 +44,7 @@ class TestModels:
             db.session.commit()
 
             task_q = Task.query.filter_by(title='Task TT1').first()
-            assert Task.query.count() == 2
+            assert Task.query.count() == 5
             assert task_q is not None
             assert task_q.title == 'Task TT1'
             assert task_q.description == 'Task Description'
