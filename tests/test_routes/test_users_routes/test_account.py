@@ -5,11 +5,10 @@ app = create_test_app()
 
 
 class TestUpdateAccount:
-
     def test_update_account_valid(self, client, login):
         response = client.post('/account', data={
             'role_id': 1,
-            'username': 'test-test',
+            'username': 'test-update-account',
             'email': 'test@test.com',
             'picture': None,
             'submit': True
@@ -17,7 +16,7 @@ class TestUpdateAccount:
                                )
 
         with app.app_context():
-            updated_user = User.query.filter_by(username='test-test').first()
+            updated_user = User.query.filter_by(username='test-update-account').first()
             assert updated_user is not None
 
     def test_update_account_duplicate_username(self, client, login):

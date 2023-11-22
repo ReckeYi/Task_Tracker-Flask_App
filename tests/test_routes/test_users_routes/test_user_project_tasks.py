@@ -7,7 +7,7 @@ app = create_test_app()
 class TestUserProjectsTasks:
     def test_user_project_tasks(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test').first()
+            user = User.query.filter_by(email='test@test.com').first()
             project = Project.query.filter_by(title='Test Project').first()
             response = client.get('/user/' + user.username + '/' + project.title)
             assert response.status_code == 200
@@ -25,7 +25,7 @@ class TestUserProjectsTasks:
 
     def test_user_project_tasks_invalid_project_title(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test').first()
+            user = User.query.filter_by(email='test@test.com').first()
             response = client.get('/user/' + user.username + '/wrongprojecttitle')
             assert response.status_code == 404
             assert b'That page does not exist. Please try a different location' in response.data

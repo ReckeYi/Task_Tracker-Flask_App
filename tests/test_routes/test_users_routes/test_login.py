@@ -1,3 +1,5 @@
+import pytest
+
 
 class TestLogin:
     def test_login(self, client):
@@ -24,6 +26,8 @@ class TestLogin:
         }, follow_redirects=True)
         assert response.status_code == 200
         assert b'<h1>Flask Task - Home Page</h1>' in response.data
+        assert client.get('/login').status_code == 302
+        assert client.get('/project_list').status_code == 200
 
     def test_login_invalid_email(self, client):
         response = client.post('/login', data={
@@ -38,7 +42,7 @@ class TestLogin:
 
     def test_login_invalid_password(self, client):
         response = client.post('/login', data={
-            'email': 'test@test.com',
+            'email': 'test2@test.com',
             'password': 'wrongpassword',
             'remember': False,
             'submit': True,
@@ -46,9 +50,3 @@ class TestLogin:
 
         assert b'Login Unsuccessful. Please check email and password' in response.data
         assert b'<title>Flask Task - Login</title>' in response.data
-
-    def test_user_is_authenticated(self, client, login):
-        response = client.get('/login')
-        assert response.status_code == 302
-        response = client.get('/project_list')
-        assert response.status_code == 200

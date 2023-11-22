@@ -7,9 +7,9 @@ app = create_test_app()
 class TestDeleteUser:
     def test_update_account_valid(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test2').first()
+            user = User.query.filter_by(username='test3').first()
             response = client.post('/user/' + str(user.id) + '/delete', follow_redirects=True)
-            deleted_user = User.query.filter_by(username='test2').first()
+            deleted_user = User.query.filter_by(username='test3').first()
             assert deleted_user is None
             assert b'User has been deleted!' in response.data
 

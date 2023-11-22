@@ -50,7 +50,9 @@ def setup_db():
 
         users = [
             User(username='test', email='test@test.com', password=hashed_test_password, role_id=1),
-            User(username='test2', email='test2@test.com', password=hashed_test_password, role_id=1)
+            User(username='test2', email='test2@test.com', password=hashed_test_password, role_id=1),
+            User(username='test3', email='test3@test.com', password=hashed_test_password, role_id=1),
+            User(username='test4', email='test4@test.com', password=hashed_test_password, role_id=1)
         ]
 
         for user in users:

@@ -19,7 +19,7 @@ class TestRegistration:
     def test_register_duplicate_username(self, client):
         hashed_password = bcrypt.generate_password_hash('test_password').decode('utf-8')
         response = client.post('/register', data={
-            'username': 'test',
+            'username': 'test2',
             'email': 'test_user@test.com',
             'password': hashed_password,
             'confirm_password': hashed_password,
@@ -31,7 +31,7 @@ class TestRegistration:
         hashed_password = bcrypt.generate_password_hash('test_password').decode('utf-8')
         response = client.post('/register', data={
             'username': 'test_user',
-            'email': 'test@test.com',
+            'email': 'test2@test.com',
             'password': hashed_password,
             'confirm_password': hashed_password,
             'submit': True

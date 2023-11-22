@@ -15,4 +15,3 @@ class PerPageForm(FlaskForm):
     submit = SubmitField('Confirm')
     searched = StringField('Title')
     search_submit = SubmitField('Search')
-

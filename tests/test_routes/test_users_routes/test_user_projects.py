@@ -7,7 +7,7 @@ app = create_test_app()
 class TestUserProjects:
     def test_user_projects_valid_username(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test').first()
+            user = User.query.filter_by(email='test@test.com').first()
             response = client.get('/user/' + user.username)
             assert response.status_code == 200
             assert b'Projects by' in response.data

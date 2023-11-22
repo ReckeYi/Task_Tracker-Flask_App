@@ -70,5 +70,6 @@ class TestViews:
         with app.app_context():
             assert client.get('/logout').status_code == 302
             assert client.get('/account').status_code == 302
+            assert client.get('/login').status_code == 200
             assert client.get('/home').status_code == 200
 

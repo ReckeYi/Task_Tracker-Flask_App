@@ -7,22 +7,22 @@ app = create_test_app()
 class TestUserUpdate:
     def test_update_account_valid(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test').first()
+            user = User.query.filter_by(email='test4@test.com').first()
             # username = user.username
             response = client.post('/user/update/' + user.username, data={
                 'role_id': 1,
-                'username': 'test-test',
-                'email': 'test@test.com',
+                'username': 'test-update-user',
+                'email': 'test4@test.com',
                 'picture': None,
                 'submit': True
             }
                                    )
-            updated_user = User.query.filter_by(username='test-test').first()
+            updated_user = User.query.filter_by(username='test-update-user').first()
             assert updated_user is not None
 
     def test_update_account_duplicate_username(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test-test').first()
+            user = User.query.filter_by(email='test4@test.com').first()
             response = client.post('/user/update/' + user.username, data={
                 'role_id': 1,
                 'username': 'test2',
@@ -35,7 +35,7 @@ class TestUserUpdate:
 
     def test_update_account_duplicate_email(self, client, login):
         with app.app_context():
-            user = User.query.filter_by(username='test-test').first()
+            user = User.query.filter_by(email='test4@test.com').first()
             response = client.post('/user/update/' + user.username, data={
                 'role_id': 1,
                 'username': 'test-test',

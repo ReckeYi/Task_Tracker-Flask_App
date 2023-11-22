@@ -12,7 +12,7 @@ class TestModels:
             db.session.commit()
 
             user_q = User.query.filter_by(username='test').first()
-            assert User.query.count() == 4
+            assert User.query.count() == 6
             assert User.query.first() is not None
             assert user_q.email == 'test@test.com'
 

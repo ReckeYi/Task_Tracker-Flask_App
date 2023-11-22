@@ -20,7 +20,7 @@ class TestResetToken:
 
     def test_reset_request_token(self, client):
         with app.app_context():
-            user = User.query.filter_by(username='test').first()
+            user = User.query.filter_by(email='test4@test.com').first()
             reset_token = user.get_reset_token()
         response = client.post('/reset_password/' + reset_token,
                                data={
