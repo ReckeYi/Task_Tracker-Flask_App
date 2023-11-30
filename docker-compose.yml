@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  flask_task:
+    build: ./ #Where Docker file is
+    container_name: flask-task
+    ports:
+      - '5000:5000'
+    environment:
+      - DB_URL=postgresql://postgres:asdasdasd@pg_db:5432/flask_task
+#    volumes:
+#      - .:/usr/src/app
+    expose:
+      - 5000
+    depends_on:
+      - pg_db
+
+  pg_db:
+    restart: always
+    image: postgres
+    volumes:
+      - ./pg_db:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=flask_task
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=asdasdasd
+    container_name: pg_db
+
+  pgadmin:
+    container_name: pgadmin4_container
+    restart: always
+    image: dpage/pgadmin4
+    depends_on:
+      - pg_db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=hso22@mail.ru
+      - PGADMIN_DEFAULT_PASSWORD=admin # если сменить здесь, то нужно удалить контентер
+    ports:
+      - '5050:80'

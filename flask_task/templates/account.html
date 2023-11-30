@@ -20,7 +20,7 @@
                 {% else %}
                 <div class="form-group">
                         {{ form.role_id.label(class="form-control-label") }}:
-                        {{ current_user.roles.role }}
+                        {{ current_user.role.role }}
                     </div>
                 {% endif %}
                 <div class="form-group">

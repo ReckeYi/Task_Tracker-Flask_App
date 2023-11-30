@@ -19,7 +19,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     image_file = db.Column(db.String(20), nullable=True, default='default.jpg')
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    roles = relationship('Role', backref='user')
+    role = relationship('Role', back_populates='user')
+    task = relationship('Task', back_populates='user')
+    project = relationship('Project', back_populates='user')
 
     def get_reset_token(self, expires_sec: int = 1800) -> str:
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)

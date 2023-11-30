@@ -1,0 +1,9 @@
+**/venv
+**/migrations
+**/.pytest_cache
+**/flask_task/temp.py
+**/flask_task/temp2.py
+**/flask_task/temp3.py
+**/__pycache__
+**/.git
+**/.dockerignore

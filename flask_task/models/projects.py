@@ -8,7 +8,7 @@ class Project(db.Model):
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = relationship('User', backref='project')
+    user = relationship('User', back_populates='project')
     created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     engage = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     task = relationship('Task', back_populates='project', cascade='all, delete-orphan')
