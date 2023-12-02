@@ -39,3 +39,13 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin # если сменить здесь, то нужно удалить контентер
     ports:
       - '5050:80'
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./static:/home/web/default/static
+    depends_on:
+      - flask_task
+      - pgadmin
