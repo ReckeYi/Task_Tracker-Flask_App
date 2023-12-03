@@ -2,9 +2,12 @@
 
 **Live project can be found [here](http://flask-task.tw1.su:5000/)**
 
-This is a pet project created with the goal of gaining practical skills to consolidate knowledge about the Flask framework.
+The project was created to demonstrate practical skills related to the Flask framework.
+
 A significant functional part of the application goes far beyond the scope of standard applications from tutorials.
-You can create and edit projects, task lists and configure access levels for users. You can also sort lists, search by keywords, and customize the amount objects displayed on the page. If you forget your account password, you can recover it using the password recovery function.
+
+You can create and edit projects, task lists and configure access levels for users. You can also sort lists, search by keywords, and customize the amount objects displayed on the page.
+In case you forgot your account password, you can recover it using the password recovery option.
 
 **List of used technologies:**
 - Flask
@@ -12,6 +15,10 @@ You can create and edit projects, task lists and configure access levels for use
 - PostgreSQL
 - Alembic
 - Bootstrap
+- Nginx
+- Docker
+- Docker Compose
+- Ubuntu Server: live version
 
 **Requirements:**
   - Python 3.9.13
@@ -23,13 +30,13 @@ You can create and edit projects, task lists and configure access levels for use
   4. **Create and configure your mail client** for [Google](https://support.google.com/a/answer/176600?hl=en) or [Yandex](https://yandex.com/support/mail/mail-clients/others.html)
   5. **Set up _config.py_** file:
      ```python
-     SQLALCHEMY_DATABASE_URI = 'postgresql://your_db_user:your_db_password@localhost:5432/db_name’
+     SQLALCHEMY_DATABASE_URI = 'postgresql://your_db_user:your_db_password@localhost:5432/db_name'
      MAIL_SERVER = 'smtp.yandex.ru'
      MAIL_PORT = 465
      MAIL_USE_TLS = False
      MAIL_USE_SSL = True
-     MAIL_USERNAME = 'your_email_user’ (copy only your username that comes before @yandex.ru)
-     MAIL_PASSWORD = 'your_app_password’
+     MAIL_USERNAME = 'your_email_user (copy only your username that comes before @yandex.ru)'
+     MAIL_PASSWORD = 'your_app_password'
      ```
   6. **Configure the environment variable**. Open terminal, run the command:
      ```
@@ -56,4 +63,4 @@ You can create and edit projects, task lists and configure access levels for use
        ```html
        <p><a href="{{ url_for('dummy_data.add_dummy_data') }}"><button type="button" class="btn btn-sm btn-danger">Add Dummy Data</button></a></p>
        ```
-  12. **[Register](http://127.0.0.1:5000/register) your account** to get full access to all  features.
+  12. **[Register](http://127.0.0.1:5000/register) your account** to get full access to all features.
