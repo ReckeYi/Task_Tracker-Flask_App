@@ -7,7 +7,7 @@ services:
     ports:
       - '5000:5000'
     environment:
-      - DB_URL=postgresql://postgres:asdasdasd@pg_db:5432/flask_task
+      - DB_URL=postgresql://pg_user:pg_password@pg_db:5432/flask_task
 #    volumes:
 #      - .:/usr/src/app
     expose:
@@ -24,8 +24,8 @@ services:
       - '5432:5432'
     environment:
       - POSTGRES_DB=flask_task
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=asdasdasd
+      - POSTGRES_USER=pg_user
+      - POSTGRES_PASSWORD=pg_password
     container_name: pg_db
 
   pgadmin:
@@ -35,8 +35,8 @@ services:
     depends_on:
       - pg_db
     environment:
-      - PGADMIN_DEFAULT_EMAIL=hso22@mail.ru
-      - PGADMIN_DEFAULT_PASSWORD=admin # если сменить здесь, то нужно удалить контентер
+      - PGADMIN_DEFAULT_EMAIL=your_email
+      - PGADMIN_DEFAULT_PASSWORD=email_password # если сменить здесь, то нужно удалить контентер
     ports:
       - '5050:80'
 
