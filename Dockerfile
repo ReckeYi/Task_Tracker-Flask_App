@@ -4,7 +4,7 @@ FROM python:3.9.13
 WORKDIR /usr/src/app
 
 #Where the requirements.txt is
-COPY requirements.txt ./
+COPY requirements.txt ./Task_Tracker-Flask_App/
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt

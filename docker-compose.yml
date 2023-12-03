@@ -2,7 +2,7 @@ version: '3'
 
 services:
   flask_task:
-    build: ./ #Where Docker file is
+    build: ./Task_Tracker-Flask_App/
     container_name: flask-task
     ports:
       - '5000:5000'
