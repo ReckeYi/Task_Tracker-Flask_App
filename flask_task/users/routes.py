@@ -112,11 +112,18 @@ def user_update(username: str) -> Union[Response, str]:
 @login_required
 def delete_user(user_id: int) -> Response:
     user = User.query.get_or_404(user_id)
+    task = Task.query.filter_by(user_id=user.id).first()
+
     if current_user.role_id != 1:
         abort(403)
-    db.session.delete(user)
-    db.session.commit()
-    flash('User has been deleted!', 'success')
+
+    if task is None:
+        db.session.delete(user)
+        db.session.commit()
+        flash('User has been deleted!', 'success')
+    else:
+        flash("This user hasn't finish some tasks yet!", "danger")
+
     return redirect(url_for('users.users_list'))
 
 

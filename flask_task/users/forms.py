@@ -56,7 +56,6 @@ class UpdateAccountForm(FlaskForm):
 
 
 class UpdateUserForm(FlaskForm):
-
     role_id = SelectField('Role', choices=[], coerce=int)
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -105,3 +104,15 @@ class AddUserForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Confirm')
+
+    def validate_username(self, username) -> username:
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. Please choose a different one.')
+
+    def validate_email(self, email) -> email:
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. Please choose a different one.')
