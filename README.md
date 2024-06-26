@@ -1,7 +1,5 @@
 # Task_Tracker-Flask_App
 
-**Live project can be found [here](http://flask-task.tw1.su:5000/)**
-
 The project was created to demonstrate practical skills related to the Flask framework.
 
 A significant functional part of the application goes far beyond the scope of standard applications from tutorials.
